@@ -9,12 +9,15 @@
 #include "cmdline.h"
 #include "PropertiesDlg.h"
 
-#include <bzscmn/file.h>
+#include <file.h>
+#include <buffer.h>
+#include <Win32/services.h>
 
 #if !defined(BAZISLIB_VERSION) || (BAZISLIB_VERSION < 0x214)
 #error BazisLib >= 2.1.4 is required to build this application
 #endif
 
+using namespace BazisLib;
 using namespace BazisLib::Win32;
 
 static struct _ColumnDescription
@@ -66,7 +69,6 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	for (unsigned i = 0; i < __countof(s_Columns); i++)
 	{
 		rkColumnWidths[s_Columns[i].pRegistryKeyName].ReadValue(&s_Columns[i].DefaultWidth);
-
 		rkVisibleCols[s_Columns[i].pRegistryKeyName].ReadValue(&s_Columns[i].Enabled);
 		m_ListView.SetColumnWidth(i, s_Columns[i].Enabled ? s_Columns[i].DefaultWidth : 0);
 		m_MainMenu.CheckMenuItem(s_Columns[i].dwMenuID, (s_Columns[i].Enabled) ? MF_CHECKED : MF_UNCHECKED);
@@ -103,6 +105,74 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	return bHandled = FALSE;
 }
 
+static int  g_iSortColumn;
+static BOOL g_bSortAscending;
+static int CALLBACK CompareFunction(LPARAM lparam1, LPARAM lparam2, LPARAM lparamsort)
+{
+	BSTR bstrItem1 = nullptr;
+	BSTR bstrItem2 = nullptr;
+
+	CListViewCtrl* m_lv = (CListViewCtrl*)lparamsort; ;
+	m_lv->GetItemText((int)lparam1, g_iSortColumn, bstrItem1);
+	m_lv->GetItemText((int)lparam2, g_iSortColumn, bstrItem2);
+
+	int result = 0;
+	if (bstrItem1 && bstrItem2)
+	{
+		if (g_bSortAscending)
+			result = _wcsicmp(bstrItem1, bstrItem2);
+		else
+			result = _wcsicmp(bstrItem2, bstrItem1);
+	}
+	// Free the BSTRs after comparison
+	SysFreeString(bstrItem1);
+	SysFreeString(bstrItem2);
+
+	return result;
+}
+
+void CMainDlg::Sort(int iColumn, BOOL bAscending)
+{
+	g_iSortColumn = iColumn;
+	g_bSortAscending = bAscending;
+
+	LVITEM lvItem;
+
+	for (int n = 0; n < m_ListView.GetItemCount(); n++)
+	{
+		lvItem.mask = LVIF_PARAM;
+		//SortItems uses the lvItem.lParam to sort the CListCtrl 
+		//The lParam1 parameter is the 32-bit value associated with the first item that is 
+		// compared, and lParam2 parameter is the value associated with the second 
+		// item.
+		// The lParam1 and lParam2 were made the sames as the current nitem numbers for the 
+		// current ListCtrl table each time the column header is clicked to new sort.
+		lvItem.lParam = (LPARAM)n;
+		lvItem.iItem = n;
+		lvItem.iSubItem = 0;
+
+		m_ListView.SetItem(&lvItem);
+	}
+
+	m_ListView.SortItems(CompareFunction, (LPARAM)&m_ListView);
+}
+
+LRESULT CMainDlg::OnListViewColumnClick(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled)
+{
+	LPNM_LISTVIEW pNMListView = (LPNM_LISTVIEW)pnmh;
+
+	const int iColumn = pNMListView->iSubItem;
+	//int Col = ((NM_LISTVIEW*)pNMHDR)->iSubItem;
+	//m_lv->SortItems(compare, (LPARAM)&GetListCtrl());// pHeader->iItem
+	
+	// if it's a second click on the same column then reverse the sort order,
+	// otherwise sort the new column in ascending order
+	Sort(iColumn, iColumn == g_iSortColumn ? !g_bSortAscending : TRUE);
+
+	return 0;
+}
+
+
 LRESULT CMainDlg::OnAppAbout(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
 	CSimpleDialog<IDD_ABOUTBOX, FALSE> dlg;
@@ -138,16 +208,19 @@ LRESULT CMainDlg::OnCommandLineHelp( WORD /*wNotifyCode*/, WORD wID, HWND /*hWnd
 void CMainDlg::ReloadServiceList()
 {
 	m_ListView.DeleteAllItems();
-	
+
 	ServiceControlManager mgr(SC_MANAGER_ENUMERATE_SERVICE);
 	TypedBuffer<QUERY_SERVICE_CONFIG> pConfig;
 	for (ServiceControlManager::iterator it = mgr.begin(); it != mgr.end(); ++it)
 	{
 		if (!it.Valid())
 			continue;
+		
 		int idx = m_ListView.InsertItem(-1, it->lpServiceName);
 
 		m_ListView.SetItem(idx, 1, LVIF_TEXT, Service::GetStateName(it->ServiceStatusProcess.dwCurrentState), 0, 0, 0, 0);
+		m_ListView.SetItemData(idx, idx); // set LPARAM for sorting
+
 		m_ListView.SetItem(idx, 2, LVIF_TEXT, Service::GetServiceTypeName(it->ServiceStatusProcess.dwServiceType), 0, 0, 0, 0);
 		m_ListView.SetItem(idx, 3, LVIF_TEXT, it->lpDisplayName, 0, 0, 0, 0);
 
@@ -162,9 +235,7 @@ void CMainDlg::ReloadServiceList()
 		}
 		else
 			UpdateServiceIcon(idx, it->ServiceStatusProcess.dwServiceType, 0, it->ServiceStatusProcess.dwCurrentState);
-
 	}
-
 }
 
 LRESULT CMainDlg::OnViewFlagsChanged( WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
@@ -312,7 +383,6 @@ void CMainDlg::UpdateServiceInfo(class BazisLib::Win32::ServiceControlManager *p
 	unsigned startType = 0;
 	if (srv.QueryConfig(&pConfig).Successful())
 		startType = pConfig->dwStartType;
-
 
 	UpdateServiceIcon(Index, status.dwServiceType, startType, status.dwCurrentState);
 	SetListItemText(Index, 1, Service::GetStateName(status.dwCurrentState));
@@ -494,7 +564,7 @@ LRESULT CMainDlg::OnBnClickedProperties(WORD /*wNotifyCode*/, WORD /*wID*/, HWND
 	bool ReadOnly = false;
 	String srvName;
 	ActionStatus st = OpenSelectedService(&srv, SERVICE_ALL_ACCESS, &srvName);
-	if (st.GetErrorCode() == BazisLib::AccessDeined)
+	if (st.GetErrorCode() == BazisLib::CommonErrorType::AccessDenied)
 		st = OpenSelectedService(&srv, SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS), ReadOnly = true;
 	if (!st.Successful())
 	{
@@ -538,7 +608,7 @@ LRESULT CMainDlg::OnBnClickedDeleteservice(WORD /*wNotifyCode*/, WORD /*wID*/, H
 			MessageBox((String(_T("Cannot delete service: ")) + m_RestartPendingServiceName + _T(": ") + st.GetMostInformativeText()).c_str(), _T("Service Manager"), MB_ICONERROR);
 			return 0;
 		}
+		m_ListView.DeleteItem(m_ListView.GetSelectedIndex());
 	}
-	m_ListView.DeleteItem(m_ListView.GetSelectedIndex());
 	return 0;
 }

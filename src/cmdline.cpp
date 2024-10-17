@@ -1,9 +1,13 @@
 #include "stdafx.h"
 #include "cmdline.h"
-#include <bzscmn/string.h>
-#include <bzswin/services.h>
+#include <bzs_string.h>
+#include <Win32/services.h>
+#include <file.h>
 
-const char szCommandLineHelpMsg[] = "Command-line options:\r\n\
+#include <map>
+#include <vector>
+
+static const char szCommandLineHelpMsg[] = "Command-line options:\r\n\
 srvman add <binary file> [service name] [display name]\r\n\
            [/type:drv/exe/fsd]\r\n\
            [/start:boot/sys/man/dis]\r\n\
@@ -19,8 +23,6 @@ srvman /? - Display this message\n\r\n\
 See http://tools.sysprogs.org/srvman/cmdline.shtml for details\r\n";
 const char szPressAnyKey[] = "Press any key to continue...";
 
-#include <map>
-#include <vector>
 
 static int ConsolePrintA(HANDLE hStdOut, const char *pStr)
 {
@@ -29,6 +31,7 @@ static int ConsolePrintA(HANDLE hStdOut, const char *pStr)
 	return dwDone;
 }
 
+using namespace BazisLib;
 using namespace BazisLib::Win32;
 
 class CommandLineArgContainer
@@ -314,8 +317,8 @@ ActionStatus CmdlRunBinary(HANDLE hStdOut, LPCTSTR lpBinary, LPCTSTR lpSvcName, 
 			GetSystemDirectory(tsz, __countof(tsz));
 			fp = tsz;
 			fp.AppendPath(_T("drivers"));
-			fp.AppendPath(fpSrc.GetFileName());
-			if (File::Exists(fp) && !Overwrite)
+			fp.AppendPath(fpSrc.GetFileName().c_str());
+			if (BazisLib::File::Exists(fp.c_str()) && !Overwrite)
 				return MAKE_STATUS(AlreadyExists);
 			if (!CopyFile(fpSrc.c_str(), fp.c_str(), !Overwrite))
 				return MAKE_STATUS(ActionStatus::FromLastError(UnknownError));
@@ -350,9 +353,9 @@ int ConsoleMain( int argc, LPWSTR *pArgv, bool ConsoleExisted )
 
 		if (cmdArgs.Params()[0] == L"add")
 		{
-			FilePath fp = cmdArgs.Params()[1];
+			FilePath fp(cmdArgs.Params()[1].c_str());
 			DWORD dwDefType = SERVICE_WIN32_OWN_PROCESS | SERVICE_INTERACTIVE_PROCESS;
-			if (!_tcsnicmp(fp->GetExtension().c_str(), _T("sys"), 3))
+			if (!_tcsnicmp(fp.GetExtension().c_str(), _T("sys"), 3))
 				dwDefType = SERVICE_KERNEL_DRIVER;
 
 			fp.ConvertToAbsolute();
@@ -393,12 +396,11 @@ int ConsoleMain( int argc, LPWSTR *pArgv, bool ConsoleExisted )
 
 	if (Parsed)
 	{
-		std::string strResult = StringToANSIString(st.GetMostInformativeText());
+		std::string strResult = StringToANSIString(st.GetMostInformativeText()).c_str();
 		ConsolePrintA(hStdOut, strResult.c_str());
 	}
 	else
 		ConsolePrintA(hStdOut, szCommandLineHelpMsg);
-
 
 	bool DoPause = !ConsoleExisted;
 	if (cmdArgs.SwitchExists(L"pause"))

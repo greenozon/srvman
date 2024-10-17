@@ -1,6 +1,6 @@
 #pragma once
 #include "resource.h"
-#include <bzswin/services.h>
+#include <Win32/services.h>
 
 #define BEGIN_MAP int get_something() {
 

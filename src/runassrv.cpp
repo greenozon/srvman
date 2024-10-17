@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "runassrv.h"
-#include <bzswin/services.h>
+#include <Win32/services.h>
+#include <status.h>
 
+using namespace BazisLib;
 using namespace BazisLib::Win32;
 
 class CommandLineRunnerService : public OwnProcessServiceWithWorkerThread
@@ -31,6 +33,7 @@ public:
 		SI.wShowWindow = SW_SHOW;
 		if (!CreateProcess(NULL, (LPWSTR)m_CommandLine.c_str(), NULL, NULL, FALSE, 0, NULL, NULL, &SI, &PI))
 			return MAKE_STATUS(ActionStatus::FromLastError(UnknownError));
+		CloseHandle(PI.hThread);
 		ReportState(SERVICE_RUNNING);
 		HANDLE hhWait[2] = {PI.hProcess, hStopEvent};
 		if (WaitForMultipleObjects(__countof(hhWait), hhWait, FALSE, INFINITE) != WAIT_OBJECT_0)
@@ -41,7 +44,6 @@ public:
 		}
 		return MAKE_STATUS(Success);
 	}
-
 };
 
 int RunCommandLineAsService( LPCTSTR lpCommandLineToRun, LPCTSTR lpServiceName )

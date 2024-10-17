@@ -70,7 +70,7 @@
 #define ID_ICONMEANING_SERVICETYPE      32800
 #define ID_ICONMEANING_SERVICESTATE     32801
 #define ID_VIEW_ACCOUNTNAME             32802
-#define ID_VIEW_REFRESH32803            32803
+#define ID_VIEW_REFRESH1                32803
 
 // Next default values for new objects
 // 

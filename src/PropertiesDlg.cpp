@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "PropertiesDlg.h"
+#include <bzs_string.h>
 
+using namespace BazisLib;
 using namespace BazisLib::Win32;
 
 CPropertiesDlg::CPropertiesDlg(const String &Name, Service *pService, bool ReadOnly)
@@ -420,7 +422,7 @@ LRESULT CPropertiesDlg::OnBnClickedBrowse(WORD /*wNotifyCode*/, WORD /*wID*/, HW
 
 	if (!::GetWindowTextLength(GetDlgItem(IDC_INTERNALNAME)))
 	{
-		FilePath fp = str;
+		FilePath fp(str.c_str());
 		SetDlgItemText(IDC_INTERNALNAME, fp.GetFileNameBase().c_str());
 		String ext = fp.GetExtension();
 		if (m_cbServiceType.GetCurSel() == -1)

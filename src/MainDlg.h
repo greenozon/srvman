@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <bzswin/registry.h>
-#include <bzswin/services.h>
+#include <Win32/registry.h>
+#include <Win32/services.h>
 
 class CMainDlg : public CDialogImpl<CMainDlg>, public CDialogResize<CMainDlg>
 {
@@ -32,6 +32,7 @@ public:
 		COMMAND_HANDLER(IDC_PROPERTIES, BN_CLICKED, OnBnClickedProperties)
 		COMMAND_HANDLER(ID_SERVICE_PROPERTIES, BN_CLICKED, OnBnClickedProperties)
 		NOTIFY_HANDLER(IDC_LIST1, NM_DBLCLK, OnListViewDblClick)
+		NOTIFY_HANDLER(IDC_LIST1, LVN_COLUMNCLICK, OnListViewColumnClick)
 		COMMAND_HANDLER(IDC_ADDSERVICE, BN_CLICKED, OnBnClickedAddservice)
 		COMMAND_HANDLER(ID_SERVICE_ADDSERVICE, BN_CLICKED, OnBnClickedAddservice)
 		COMMAND_HANDLER(IDC_DELETESERVICE, BN_CLICKED, OnBnClickedDeleteservice)
@@ -46,7 +47,7 @@ public:
 		COMMAND_ID_HANDLER(ID_VIEW_STARTTYPE,		OnViewFlagsChanged)
 		COMMAND_ID_HANDLER(ID_VIEW_BINARYFILE,		OnViewFlagsChanged)
 		COMMAND_ID_HANDLER(ID_VIEW_ACCOUNTNAME,		OnViewFlagsChanged)
-		COMMAND_ID_HANDLER(ID_VIEW_REFRESH,			OnRefreshSelected)
+		COMMAND_ID_HANDLER(ID_VIEW_REFRESH1,		OnRefreshSelected)
 		COMMAND_ID_HANDLER(ID_ICONMEANING_SERVICETYPE,		OnIconModeChanged)
 		COMMAND_ID_HANDLER(ID_ICONMEANING_SERVICESTATE,		OnIconModeChanged)
 		COMMAND_ID_HANDLER(ID_HELP_OPENPROJECTPAGE,	OnOpenWebpage)
@@ -79,6 +80,7 @@ private:
 	void SetListItemText(unsigned Index, unsigned Subindex, LPCTSTR pszText);
 
 	void SaveState();
+	void Sort(int iColumn, BOOL bAscending);
 
 	BazisLib::ActionStatus OpenSelectedService(BazisLib::Win32::Service *pService, DWORD dwAccess = SERVICE_ALL_ACCESS, BazisLib::String *pName = NULL);
 
@@ -102,7 +104,7 @@ public:
 
 	LRESULT OnSelChanged(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/);
 	LRESULT OnListViewDblClick(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/);
-
+	LRESULT OnListViewColumnClick(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& bHandled);
 	LRESULT StartStopService(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 
 private:

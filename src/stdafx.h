@@ -3,20 +3,29 @@
 //      are changed infrequently
 //
 
+#if _MSC_VER > 1000
 #pragma once
+#endif // _MSC_VER > 1000
+
+
+// Insert your headers here
+#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+// #include <windows.h> // MFC apps must not #include <Windows.h>
 
 // Change these values to use different versions
-#define WINVER		0x0500
+#define WINVER			0x0501
 #define _WIN32_WINNT	0x0501
-#define _WIN32_IE	0x0501
-#define _RICHEDIT_VER	0x0200
+#define _WIN32_IE		0x0600
+#define _RICHEDIT_VER	0x0300
+
+#define _SECURE_ATL 1
 
 #include <atlbase.h>
 #include <atlapp.h>
 
 extern CAppModule _Module;
 
-#include <atlwin.h>
+//#include <atlwin.h>
 
 #include <atlframe.h>
 #include <atlctrls.h>
