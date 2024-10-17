@@ -6,4 +6,5 @@ tmp/**
 *.user
 *.aps
 *.tmp
+x64/
 Debug/
