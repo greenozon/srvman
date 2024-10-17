@@ -8,4 +8,4 @@ set env var named `WTLDIR` which points to `Include` dir inside WTL folder, eg:
 c:\Dev\libraries\WTL\Include
 ```
 Open up bzscore.sln, select Debug (Win32) Platform/x64 and build the lib
-Open up srvman.sln, select Debug (Win32) Platform/x64 and build it as well
+Open up srvman.sln, select Debug Platform/x64 and build it as well
