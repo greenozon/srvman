@@ -1,0 +1,396 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "atlres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_DRIVER              ICON                    "res\\driver.ico"
+IDI_FSDRIVER            ICON                    "res\\fsdriver.ico"
+IDI_GREEN               ICON                    "res\\green.ico"
+IDI_GREY                ICON                    "res\\grey.ico"
+IDI_MULTISERV           ICON                    "res\\multiserv.ico"
+IDI_RED                 ICON                    "res\\red.ico"
+IDI_SERV                ICON                    "res\\service.ico"
+IDI_YELLOW              ICON                    "res\\yellow.ico"
+IDI_INTERACTIVE         ICON                    "res\\interserv.ico"
+IDI_SYSTEM              ICON                    "res\\system.ico"
+IDI_AUTO                ICON                    "res\\auto.ico"
+IDI_BOOT                ICON                    "res\\boot.ico"
+IDI_DISABLED            ICON                    "res\\disabled.ico"
+IDI_MANUAL              ICON                    "res\\manual.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",                       IDC_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Refresh",                    ID_VIEW_REFRESH
+        POPUP "Icon meaning"
+        BEGIN
+            MENUITEM "Service type",                ID_ICONMEANING_SERVICETYPE
+            MENUITEM "Service state",               ID_ICONMEANING_SERVICESTATE
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "&Internal name",              ID_VIEW_INTERNALNAME
+        MENUITEM "&State",                      ID_VIEW_STATE
+        MENUITEM "&Type",                       ID_VIEW_TYPE
+        MENUITEM "&Display name",               ID_VIEW_DISPLAYNAME
+        MENUITEM "St&art type",                 ID_VIEW_STARTTYPE
+        MENUITEM "&Executable",                 ID_VIEW_BINARYFILE
+        MENUITEM "&Account name",               ID_VIEW_ACCOUNTNAME
+    END
+    POPUP "&Service"
+    BEGIN
+        POPUP "&Control"
+        BEGIN
+            MENUITEM "&Start",                      ID_CONTROL_START
+            MENUITEM "S&top",                       ID_CONTROL_STOP
+            MENUITEM "&Restart",                    ID_CONTROL_RESTART
+        END
+        MENUITEM "&Properties...",              ID_SERVICE_PROPERTIES
+        MENUITEM "&Add service...",             ID_SERVICE_ADDSERVICE
+        MENUITEM "&Delete service",             ID_SERVICE_DELETESERVICE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Support...",                 ID_HELP_OPENPROJECTPAGE
+        MENUITEM "&Command line help...",       ID_HELP_COMMANDLINEHELP
+        MENUITEM SEPARATOR
+        MENUITEM "&About",                      ID_APP_ABOUT
+    END
+END
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\srvman.ico"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""atlres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 129, 93
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,39,72,50,14
+    CTEXT           "Service Manager for Windows\r\n Version 1.0\r\n http://www.sysprogs.org/",IDC_STATIC,7,38,113,32
+    ICON            IDR_MAINFRAME,IDC_STATIC,54,15,20,20
+    GROUPBOX        "",IDC_STATIC,7,7,115,62
+END
+
+IDD_MAINDLG DIALOGEX 0, 0, 524, 222
+STYLE DS_SETFONT | DS_CENTER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Service Manager"
+MENU IDR_MENU1
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,1,510,177
+    PUSHBUTTON      "Properties...",IDC_PROPERTIES,7,183,163,14
+    PUSHBUTTON      "Start service",IDC_STARTSTOP,179,182,163,14
+    PUSHBUTTON      "Restart service",IDC_RESTART,354,182,163,14
+    PUSHBUTTON      "Add service",IDC_ADDSERVICE,7,201,163,14
+    PUSHBUTTON      "Delete service",IDC_DELETESERVICE,179,201,163,14
+    PUSHBUTTON      "Exit",IDC_EXIT,354,201,163,14
+END
+
+IDD_SERVICEPROPS DIALOGEX 0, 0, 344, 276
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Service properties"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,7,255,164,14
+    PUSHBUTTON      "Cancel",IDCANCEL,173,255,164,14
+    RTEXT           "Internal service name:",IDC_STATIC,7,9,83,8
+    EDITTEXT        IDC_INTERNALNAME,95,7,242,14,ES_AUTOHSCROLL
+    RTEXT           "User-visible name:",IDC_STATIC,7,25,83,8
+    EDITTEXT        IDC_VISIBLENAME,95,24,242,14,ES_AUTOHSCROLL
+    RTEXT           "Binary file path (Win32):",IDC_STATIC,7,41,83,8
+    EDITTEXT        IDC_WIN32PATH,95,40,212,14,ES_AUTOHSCROLL
+    RTEXT           "Binary path (raw):",IDC_STATIC,7,57,83,8
+    EDITTEXT        IDC_TRANSLATEDPATH,95,56,242,33,ES_MULTILINE | ES_AUTOVSCROLL
+    PUSHBUTTON      "???",IDC_PROPERTIES,323,40,14,14
+    CONTROL         "",IDC_SERVICETYPE,"ComboBoxEx32",CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP,95,92,160,210
+    RTEXT           "Service type:",IDC_STATIC,7,94,83,8
+    CONTROL         "",IDC_STARTMODE,"ComboBoxEx32",CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP,95,108,242,210
+    RTEXT           "Start mode:",IDC_STATIC,7,111,83,8
+    CONTROL         "Interactive service",IDC_INTERACTIVE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,261,94,76,10
+    RTEXT           "Load order group:",IDC_STATIC,7,127,83,8
+    EDITTEXT        IDC_LOADGROUP,95,124,242,14,ES_AUTOHSCROLL
+    RTEXT           "Logon account:",IDC_STATIC,7,142,83,8
+    EDITTEXT        IDC_LOGIN,95,140,242,14,ES_AUTOHSCROLL
+    RTEXT           "Logon account password:",IDC_STATIC,7,158,83,8
+    EDITTEXT        IDC_PASSWORD,95,156,242,14,ES_PASSWORD | ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSE,308,40,14,14
+    LTEXT           "Service description:",IDC_STATIC,10,174,83,8
+    EDITTEXT        IDC_DESCRIPTION,7,185,330,67,ES_MULTILINE | ES_AUTOVSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 122
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 86
+    END
+
+    IDD_MAINDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 517
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 215
+    END
+
+    IDD_SERVICEPROPS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 337
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 269
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "SysProgs.org"
+            VALUE "CompanyName", "SysProgs.org"
+            VALUE "FileDescription", "Service Manager for Windows"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "srvman"
+            VALUE "LegalCopyright", "LGPL"
+            VALUE "OriginalFilename", "srvman.exe"
+            VALUE "ProductName", "Service Manager for Windows"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "srvman"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+    ID_FILE_PAGE_SETUP      "Change the printing options\nPage Setup"
+    ID_FILE_PRINT_SETUP     "Change the printer and printing options\nPrint Setup"
+    ID_FILE_PRINT           "Print the active document\nPrint"
+    ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE 
+BEGIN
+    ATL_IDS_SCSIZE          "Change the window size"
+    ATL_IDS_SCMOVE          "Change the window position"
+    ATL_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    ATL_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    ATL_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    ATL_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    ATL_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE 
+BEGIN
+    ATL_IDS_SCRESTORE       "Restore the window to normal size"
+    ATL_IDS_SCTASKLIST      "Activate Task List"
+    ATL_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE 
+BEGIN
+    ATL_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE 
+BEGIN
+    ATL_IDS_MRU_FILE        "Open this document"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
