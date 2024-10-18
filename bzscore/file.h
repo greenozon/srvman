@@ -185,6 +185,7 @@ namespace BazisLib
 
 		String GetFileNameBase()
 		{
+			//TODO
 			//std::wstring full_path(filePath.c_str());
 			//size_t slash_pos = full_path.rfind('/');
 			//size_t dot_pos = full_path.rfind('.');
@@ -194,31 +195,34 @@ namespace BazisLib
 		
 		String GetFileName()
 		{
+			//TODO
 			return L"fake";
 		}
 		String GetExtension()
 		{
-			//todo
+			//TODO
 			return L"fake";
 		}
 
 		void AppendPath(LPCTSTR lpPath)
 		{
-
+			//TODO
 		}
 
 		String AppendAndReturn(LPCTSTR lpPath)
 		{
+			//TODO
 			return L"fake";
 		}
 
 		void ConvertToAbsolute()
 		{
-			//todo
+			//TODO
 		}
 
 		static FilePath GetSpecialDirectoryLocation(SpecialDirectoryType type)
 		{
+			//TODO
 			LPCWSTR loc = L"";
 			if (type == SpecialDirectoryType::dirDrivers)
 				loc = L"c:\\Windows\\System32\\drivers";
